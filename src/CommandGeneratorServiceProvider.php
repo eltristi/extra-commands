@@ -7,6 +7,7 @@ use eltristi\CommandGenerator\Commands\MakeRepositoryCommand;
 use eltristi\CommandGenerator\Commands\MakeServiceCommand;
 use eltristi\CommandGenerator\Commands\MakeTraitCommand;
 use eltristi\CommandGenerator\Commands\MakeEnumCommand;
+use eltristi\CommandGenerator\Commands\MakeInterfaceCommand;
 
 class CommandGeneratorServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,7 @@ class CommandGeneratorServiceProvider extends ServiceProvider
             $this->commands([
                 MakeRepositoryCommand::class,
                 MakeServiceCommand::class,
+                MakeInterfaceCommand::class,
                 MakeTraitCommand::class,
                 MakeEnumCommand::class,
             ]);

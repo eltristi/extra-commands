@@ -94,16 +94,30 @@ class MakeServiceCommand extends GeneratorCommand
     {
         $providerPath = app_path('Providers/ServicesServiceProvider.php');
         $providerContents = file_get_contents($providerPath);
-
-        $serviceInterface = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\'))
-            . '\\' . config('generator.namespace.serviceInterface')
-            . '\\' . $this->argument('name') . "Interface";
-
-        $serviceClass = $this->qualifyClass($this->getNameInput());
-
-        $newBinding = "\n        \$this->app->singleton({$serviceInterface}::class, {$serviceClass}::class);";
-
-        $providerContents = str_replace('public function register()\n    {', 'public function register()\n    {' . $newBinding, $providerContents);
+    
+        $serviceInterface = $this->argument('name') . "Interface";
+        $serviceClass = $this->argument('name');
+    
+        $newBinding = "        \$this->app->bind({$serviceInterface}::class, {$serviceClass}::class);\n";
+    
+        $serviceInterfaceFullNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.serviceInterface') . '\\' . $serviceInterface;
+        $serviceClassFullNamespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\')) . '\\' . $serviceClass;
+    
+        if (!str_contains($providerContents, "use {$serviceInterfaceFullNamespace};")) {
+            $providerContents = str_replace("namespace App\\Providers;", "namespace App\\Providers;\nuse {$serviceInterfaceFullNamespace};", $providerContents);
+        }
+    
+        if (!str_contains($providerContents, "use {$serviceClassFullNamespace};")) {
+            $providerContents = str_replace("namespace App\\Providers;\nuse {$serviceInterfaceFullNamespace};", "namespace App\\Providers;\nuse {$serviceInterfaceFullNamespace};\nuse {$serviceClassFullNamespace};", $providerContents);
+        }
+    
+        if (!str_contains($providerContents, $newBinding)) {
+            if (!str_contains($providerContents, "public function register(): void")) {
+                $providerContents = str_replace("public function register()", "public function register(): void", $providerContents);
+            }
+            $providerContents = preg_replace("/public function register\(\): void[^\{]*\{(\s*\n)?/", "public function register(): void\n    {\n{$newBinding}", $providerContents);
+        }
+    
         file_put_contents($providerPath, $providerContents);
     }
 

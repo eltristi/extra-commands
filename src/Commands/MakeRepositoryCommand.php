@@ -111,24 +111,45 @@ class MakeRepositoryCommand extends GeneratorCommand
     {
         $providerPath = app_path('Providers/RepositoryServiceProvider.php');
         $providerContents = file_get_contents($providerPath);
-
-        $repositoryInterfaceNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.repositoryInterface') . '\\' . $this->argument('name') . "Interface";
-        $repositoryClassNamespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\')) . '\\' . $this->argument('name');
-
-        $newBinding = "\n        \$this->app->bind(\\{$repositoryInterfaceNamespace}::class, \\{$repositoryClassNamespace}::class);";
-
-        $providerContents = str_replace(
-            'public function register()\n    {',
-            'public function register(): void\n    {' . $newBinding,
-            $providerContents
-        );
-        $providerContents = str_replace(
-            'public function register(): void\n    {',
-            'public function register(): void\n    {' . $newBinding,
-            $providerContents
-        );
+    
+        $repositoryInterface = $this->argument('name') . "Interface";
+        $repositoryClass = $this->argument('name');
+    
+        $newBinding = "        \$this->app->bind({$repositoryInterface}::class, {$repositoryClass}::class);\n";
+    
+        // Add Repository Interface and Repository Class use statements if they don't exist
+        $repositoryInterfaceFullNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.repositoryInterface') . '\\' . $repositoryInterface;
+        $repositoryClassFullNamespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\')) . '\\' . $repositoryClass;
+    
+        if (!str_contains($providerContents, "use {$repositoryInterfaceFullNamespace};")) {
+            $providerContents = str_replace("namespace App\\Providers;", "namespace App\\Providers;\nuse {$repositoryInterfaceFullNamespace};", $providerContents);
+        }
+    
+        if (!str_contains($providerContents, "use {$repositoryClassFullNamespace};")) {
+            $providerContents = str_replace("namespace App\\Providers;\nuse {$repositoryInterfaceFullNamespace};", "namespace App\\Providers;\nuse {$repositoryInterfaceFullNamespace};\nuse {$repositoryClassFullNamespace};", $providerContents);
+        }
+    
+        // Place the new binding in the register() method
+        if (!str_contains($providerContents, $newBinding)) {
+            if (!str_contains($providerContents, "public function register(): void")) {
+                $providerContents = str_replace("public function register()", "public function register(): void", $providerContents);
+            }
+            $providerContents = preg_replace("/public function register\(\): void[^\{]*\{(\s*\n)?/", "public function register(): void\n    {\n{$newBinding}", $providerContents);
+        }
+    
         file_put_contents($providerPath, $providerContents);
     }
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
 
 
     protected function createInterface()
