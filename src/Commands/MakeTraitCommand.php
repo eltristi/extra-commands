@@ -1,6 +1,6 @@
 <?php
 
-namespace eltristi\CommandGenerator\Commands;
+namespace eltristi\ExtraCommands\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 

@@ -1,6 +1,6 @@
 {
-    "name": "eltristi/command-generator",
-    "description": "A Laravel package to generate repositories, services, traits and enums.",
+    "name": "eltristi/extra-commands",
+    "description": "A Laravel package to generate repositories, services, interfaces, traits and enums.",
     "type": "library",
     "require": {
         "illuminate/support": "^10.0",
@@ -8,13 +8,13 @@
     },
     "autoload": {
         "psr-4": {
-            "eltristi\\CommandGenerator\\": "src/"
+            "eltristi\\ExtraCommands\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "eltristi\\CommandGenerator\\CommandGeneratorServiceProvider"
+                "eltristi\\ExtraCommands\\ExtraCommandsServiceProvider"
             ]
         }
     },

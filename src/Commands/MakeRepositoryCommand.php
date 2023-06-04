@@ -1,6 +1,6 @@
 <?php
 
-namespace eltristi\CommandGenerator\Commands;
+namespace eltristi\ExtraCommands\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -89,17 +89,13 @@ class MakeRepositoryCommand extends GeneratorCommand
 
     protected function createProviderIfNeeded()
     {
-        // Define the name of the provider
         $providerName = 'RepositoryServiceProvider';
 
-        // Check if provider exists, if not create it
         $providerPath = app_path('Providers/' . $providerName . '.php');
 
         if (!file_exists($providerPath)) {
-            // Create the provider using Artisan
             \Artisan::call('make:provider', ['name' => $providerName]);
 
-            // Add provider to config/app.php
             $configApp = file_get_contents(config_path('app.php'));
             $newProvider = "App\\Providers\\" . $providerName . "::class,";
             $configApp = str_replace("'providers' => [", "'providers' => [\n        " . $newProvider, $configApp);
@@ -117,7 +113,6 @@ class MakeRepositoryCommand extends GeneratorCommand
     
         $newBinding = "        \$this->app->bind({$repositoryInterface}::class, {$repositoryClass}::class);\n";
     
-        // Add Repository Interface and Repository Class use statements if they don't exist
         $repositoryInterfaceFullNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.repositoryInterface') . '\\' . $repositoryInterface;
         $repositoryClassFullNamespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\')) . '\\' . $repositoryClass;
     
@@ -129,7 +124,6 @@ class MakeRepositoryCommand extends GeneratorCommand
             $providerContents = str_replace("namespace App\\Providers;\nuse {$repositoryInterfaceFullNamespace};", "namespace App\\Providers;\nuse {$repositoryInterfaceFullNamespace};\nuse {$repositoryClassFullNamespace};", $providerContents);
         }
     
-        // Place the new binding in the register() method
         if (!str_contains($providerContents, $newBinding)) {
             if (!str_contains($providerContents, "public function register(): void")) {
                 $providerContents = str_replace("public function register()", "public function register(): void", $providerContents);
@@ -139,53 +133,32 @@ class MakeRepositoryCommand extends GeneratorCommand
     
         file_put_contents($providerPath, $providerContents);
     }
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-
 
     protected function createInterface()
     {
-        // Define the interface name and path
         $interfaceName = $this->argument('name') . 'Interface';
         $interfaceNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.repositoryInterface');
         $interfaceClass = $interfaceNamespace . '\\' . $interfaceName;
 
-        // Check if interface already exists
         if (class_exists($interfaceClass)) {
             $this->error('Interface already exists!');
             return false;
         }
 
-        // Define the path to the interface stub
         $interfaceStubPath = $this->getInterfaceStub();
 
-        // Get the stub content
         $interfaceStubContent = file_get_contents($interfaceStubPath);
 
-        // Replace the DummyNamespace and DummyInterface placeholders
         $interfaceContent = str_replace(['DummyNamespace', 'DummyInterface'], [$interfaceNamespace, $interfaceName], $interfaceStubContent);
 
-        // Define the path to the interface file
         $interfacePath = app_path(str_replace('\\', '/', config('generator.namespace.repositoryInterface')));
 
-        // Check if the directory exists, if not create it
         if (!is_dir($interfacePath)) {
             mkdir($interfacePath, 0777, true);
         }
 
-        // Write the interface content to the file
         file_put_contents($interfacePath . '/' . $interfaceName . '.php', $interfaceContent);
 
-        // Return the fully qualified interface name
         return $interfaceClass;
     }
 }

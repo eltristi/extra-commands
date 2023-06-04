@@ -1,15 +1,15 @@
 <?php
 
-namespace eltristi\CommandGenerator;
+namespace eltristi\ExtraCommands;
 
 use Illuminate\Support\ServiceProvider;
-use eltristi\CommandGenerator\Commands\MakeRepositoryCommand;
-use eltristi\CommandGenerator\Commands\MakeServiceCommand;
-use eltristi\CommandGenerator\Commands\MakeTraitCommand;
-use eltristi\CommandGenerator\Commands\MakeEnumCommand;
-use eltristi\CommandGenerator\Commands\MakeInterfaceCommand;
+use eltristi\ExtraCommands\Commands\MakeRepositoryCommand;
+use eltristi\ExtraCommands\Commands\MakeServiceCommand;
+use eltristi\ExtraCommands\Commands\MakeTraitCommand;
+use eltristi\ExtraCommands\Commands\MakeEnumCommand;
+use eltristi\ExtraCommands\Commands\MakeInterfaceCommand;
 
-class CommandGeneratorServiceProvider extends ServiceProvider
+class ExtraCommandsServiceProvider extends ServiceProvider
 {
     public function boot()
     {

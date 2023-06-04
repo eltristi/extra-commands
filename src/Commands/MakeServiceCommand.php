@@ -1,6 +1,6 @@
 <?php
 
-namespace eltristi\CommandGenerator\Commands;
+namespace eltristi\ExtraCommands\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -72,17 +72,13 @@ class MakeServiceCommand extends GeneratorCommand
 
     protected function createProviderIfNeeded()
     {
-        // Define the name of the provider
         $providerName = 'ServicesServiceProvider';
         
-        // Check if provider exists, if not create it
         $providerPath = app_path('Providers/' . $providerName . '.php');
         
         if (!file_exists($providerPath)) {
-            // Create the provider using Artisan
             \Artisan::call('make:provider', ['name' => $providerName]);
         
-            // Add provider to config/app.php
             $configApp = file_get_contents(config_path('app.php'));
             $newProvider = "App\\Providers\\" . $providerName . "::class,";
             $configApp = str_replace("'providers' => [", "'providers' => [\n        " . $newProvider, $configApp);
@@ -123,38 +119,29 @@ class MakeServiceCommand extends GeneratorCommand
 
     protected function createInterface()
     {
-        // Define the interface name and path
         $interfaceName = $this->argument('name') . 'Interface';
         $interfaceNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.serviceInterface');
         $interfaceClass = $interfaceNamespace . '\\' . $interfaceName;
 
-        // Check if interface already exists
         if (class_exists($interfaceClass)) {
             $this->error('Interface already exists!');
             return false;
         }
 
-        // Define the path to the interface stub
         $interfaceStubPath = $this->getInterfaceStub();
 
-        // Get the stub content
         $interfaceStubContent = file_get_contents($interfaceStubPath);
 
-        // Replace the DummyNamespace and DummyInterface placeholders
         $interfaceContent = str_replace(['DummyNamespace', 'DummyInterface'], [$interfaceNamespace, $interfaceName], $interfaceStubContent);
 
-        // Define the path to the interface file
         $interfacePath = app_path(str_replace('\\', '/', config('generator.namespace.serviceInterface')));
 
-        // Check if the directory exists, if not create it
         if (!is_dir($interfacePath)) {
             mkdir($interfacePath, 0777, true);
         }
 
-        // Write the interface content to the file
         file_put_contents($interfacePath . '/' . $interfaceName . '.php', $interfaceContent);
 
-        // Return the fully qualified interface name
         return $interfaceClass;
     }
 }
