@@ -1,4 +1,4 @@
-# Laravel Custom Generator Commands
+# Laravel Extra Commands
 
 This package provides additional artisan make commands for Laravel to speed up your development process.
 
@@ -7,7 +7,7 @@ This package provides additional artisan make commands for Laravel to speed up y
 You can install the package via composer:
 
 ```bash
-composer require eltristi/command-generator
+composer require eltristi/extra-commands
 ```
 
 ## Available Commands
