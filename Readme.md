@@ -10,6 +10,12 @@ You can install the package via composer:
 composer require eltristi/extra-commands
 ```
 
+Make sure you publish the config file:
+
+```bash
+php artisan vendor:publish --provider="eltristi\ExtraCommands\ExtraCommandsServiceProvider"
+```
+
 ## Available Commands
 
 ### make:repository
