@@ -25,7 +25,7 @@ class MakeServiceCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\\' . config('generator.namespace.service');
+        return $rootNamespace . '\\' . config('extra-commands.namespace.service');
     }
 
     protected function buildClass($name)
@@ -36,7 +36,7 @@ class MakeServiceCommand extends GeneratorCommand
     
         if ($this->option('interface')) {
             $replace["DummyNamespace\\DummyInterface"] =  trim($this->rootNamespace(), '\\') 
-            . '\\' . config('generator.namespace.serviceInterface')
+            . '\\' . config('extra-commands.namespace.serviceInterface')
             . '\\' . $this->argument('name') . "Interface";
         }
 
@@ -96,7 +96,7 @@ class MakeServiceCommand extends GeneratorCommand
     
         $newBinding = "        \$this->app->bind({$serviceInterface}::class, {$serviceClass}::class);\n";
     
-        $serviceInterfaceFullNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.serviceInterface') . '\\' . $serviceInterface;
+        $serviceInterfaceFullNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('extra-commands.namespace.serviceInterface') . '\\' . $serviceInterface;
         $serviceClassFullNamespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\')) . '\\' . $serviceClass;
     
         if (!str_contains($providerContents, "use {$serviceInterfaceFullNamespace};")) {
@@ -120,7 +120,7 @@ class MakeServiceCommand extends GeneratorCommand
     protected function createInterface()
     {
         $interfaceName = $this->argument('name') . 'Interface';
-        $interfaceNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.serviceInterface');
+        $interfaceNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('extra-commands.namespace.serviceInterface');
         $interfaceClass = $interfaceNamespace . '\\' . $interfaceName;
 
         if (class_exists($interfaceClass)) {
@@ -134,7 +134,7 @@ class MakeServiceCommand extends GeneratorCommand
 
         $interfaceContent = str_replace(['DummyNamespace', 'DummyInterface'], [$interfaceNamespace, $interfaceName], $interfaceStubContent);
 
-        $interfacePath = app_path(str_replace('\\', '/', config('generator.namespace.serviceInterface')));
+        $interfacePath = app_path(str_replace('\\', '/', config('extra-commands.namespace.serviceInterface')));
 
         if (!is_dir($interfacePath)) {
             mkdir($interfacePath, 0777, true);

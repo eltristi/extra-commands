@@ -35,7 +35,7 @@ class MakeRepositoryCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\\' . config('generator.namespace.repository');
+        return $rootNamespace . '\\' . config('extra-commands.namespace.repository');
     }
 
     protected function buildClass($name)
@@ -46,7 +46,7 @@ class MakeRepositoryCommand extends GeneratorCommand
 
         if ($this->option('interface')) {
             $replace["DummyNamespace\\DummyInterface"] =  trim($this->rootNamespace(), '\\')
-                . '\\' . config('generator.namespace.repositoryInterface')
+                . '\\' . config('extra-commands.namespace.repositoryInterface')
                 . '\\' . $this->argument('name') . "Interface";
         }
 
@@ -113,7 +113,7 @@ class MakeRepositoryCommand extends GeneratorCommand
     
         $newBinding = "        \$this->app->bind({$repositoryInterface}::class, {$repositoryClass}::class);\n";
     
-        $repositoryInterfaceFullNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.repositoryInterface') . '\\' . $repositoryInterface;
+        $repositoryInterfaceFullNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('extra-commands.namespace.repositoryInterface') . '\\' . $repositoryInterface;
         $repositoryClassFullNamespace = $this->getDefaultNamespace(trim($this->rootNamespace(), '\\')) . '\\' . $repositoryClass;
     
         if (!str_contains($providerContents, "use {$repositoryInterfaceFullNamespace};")) {
@@ -137,7 +137,7 @@ class MakeRepositoryCommand extends GeneratorCommand
     protected function createInterface()
     {
         $interfaceName = $this->argument('name') . 'Interface';
-        $interfaceNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('generator.namespace.repositoryInterface');
+        $interfaceNamespace = trim($this->rootNamespace(), '\\') . '\\' . config('extra-commands.namespace.repositoryInterface');
         $interfaceClass = $interfaceNamespace . '\\' . $interfaceName;
 
         if (class_exists($interfaceClass)) {
@@ -151,7 +151,7 @@ class MakeRepositoryCommand extends GeneratorCommand
 
         $interfaceContent = str_replace(['DummyNamespace', 'DummyInterface'], [$interfaceNamespace, $interfaceName], $interfaceStubContent);
 
-        $interfacePath = app_path(str_replace('\\', '/', config('generator.namespace.repositoryInterface')));
+        $interfacePath = app_path(str_replace('\\', '/', config('extra-commands.namespace.repositoryInterface')));
 
         if (!is_dir($interfacePath)) {
             mkdir($interfacePath, 0777, true);

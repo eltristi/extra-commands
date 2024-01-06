@@ -24,7 +24,12 @@ class ExtraCommandsServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/../config/generator.php' => config_path('generator.php'),
+            __DIR__.'/../config/extra-commands.php' => config_path('extra-commands.php'),
         ], 'config');
+    }
+
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/extra-commands.php', 'extra-commands');
     }
 }

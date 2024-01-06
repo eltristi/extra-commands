@@ -20,7 +20,7 @@ class MakeEnumCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\\' . config('generator.namespace.enum');
+        return $rootNamespace . '\\' . config('extra-commands.namespace.enum');
     }
 
     protected function buildClass($name)

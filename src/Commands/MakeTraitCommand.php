@@ -17,6 +17,6 @@ class MakeTraitCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\\' . config('generator.namespace.trait');
+        return $rootNamespace . '\\' . config('extra-commands.namespace.trait');
     }
 }

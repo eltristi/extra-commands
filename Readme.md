@@ -10,7 +10,7 @@ You can install the package via composer:
 composer require eltristi/extra-commands
 ```
 
-Make sure you publish the config file:
+You can publish the config file if you want to change the default directories:
 
 ```bash
 php artisan vendor:publish --provider="eltristi\ExtraCommands\ExtraCommandsServiceProvider"

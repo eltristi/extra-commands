@@ -22,9 +22,9 @@ class MakeInterfaceCommand extends GeneratorCommand
 
         switch ($interfaceType) {
             case 'repository':
-                return $rootNamespace . '\\' . config('generator.namespace.repositoryInterface');
+                return $rootNamespace . '\\' . config('extra-commands.namespace.repositoryInterface');
             case 'service':
-                return $rootNamespace . '\\' . config('generator.namespace.serviceInterface');
+                return $rootNamespace . '\\' . config('extra-commands.namespace.serviceInterface');
             default:
                 return $rootNamespace . '\\Contracts';
         }
