@@ -2,6 +2,8 @@
 
 namespace eltristi\ExtraCommands;
 
+use eltristi\ExtraCommands\Commands\MakeCollectionCommand;
+use eltristi\ExtraCommands\Commands\MakeDtoCommand;
 use Illuminate\Support\ServiceProvider;
 use eltristi\ExtraCommands\Commands\MakeRepositoryCommand;
 use eltristi\ExtraCommands\Commands\MakeServiceCommand;
@@ -20,6 +22,8 @@ class ExtraCommandsServiceProvider extends ServiceProvider
                 MakeInterfaceCommand::class,
                 MakeTraitCommand::class,
                 MakeEnumCommand::class,
+                MakeDtoCommand::class,
+                MakeCollectionCommand::class,
             ]);
         }
 

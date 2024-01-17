@@ -7,6 +7,8 @@ return [
         'trait' => 'Traits',
         'enum' => 'Enums',
         'repositoryInterface' => 'Contracts\\Repositories',
-        'serviceInterface' => 'Contracts\\Services'
+        'serviceInterface' => 'Contracts\\Services',
+        'dto' => 'DTOs',
+        'collection' => 'Collections',
     ],
 ];

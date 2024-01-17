@@ -1,0 +1,23 @@
+<?php
+
+namespace DummyNamespace;
+
+class DummyClass
+{
+    public string $example;
+
+    /**
+     * DummyClass constructor.
+     * @param string $example
+     * @return void
+     */
+    public function __construct(string $example)
+    {
+        $this->example = $example;
+    }
+
+    public function toArray(): array
+    {
+        return get_object_vars($this);
+    }
+}
